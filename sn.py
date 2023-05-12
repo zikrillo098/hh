@@ -12,14 +12,16 @@ params = {
     'salary': '',
     'st': 'searchVacancy',
     'text': f'{job}',  # Здесь указываем поисковую фразу
-    'page': '0'
+    'page': '1'
 }
-
+print(params)
 response = requests.get(url.replace('python', job), params=params)
 soup = BeautifulSoup(response.text, 'html.parser')
 
 # Находим все элементы с классом "vacancy-serp-item"
-vacancy_items = soup.find_all('div', {'class': 'serp-item'})
+vacancy_items = soup.find_all('div', {
+    'class': "class=bloko-column bloko-column_xs-4 bloko-column_s-8 bloko-column_m-9 bloko-column_l-13"})
+print(vacancy_items)
 
 vacancy = []  # Создаем объекты вакансий и отправляем их в бот
 for item in vacancy_items:
@@ -31,7 +33,7 @@ for item in vacancy_items:
         salary = salary.text.replace(u'\xa0', u' ')
     else:
         salary = 'З/П не указана'
-
+    print(title, company, salary)
     # Создаем объект вакансии и отправляем его в бот
     vacancy.append(f'Название вакансии: {title}\nКомпания: {company}\nЗарплата: {salary}\n---\n')
 print(vacancy)
